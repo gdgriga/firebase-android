@@ -1,4 +1,11 @@
 package lv.gdgriga.firebase;
 
-public class Task {
+class Task {
+    final String title;
+    final int column;
+
+    Task(String title, int column) {
+        this.title = title;
+        this.column = column;
+    }
 }
