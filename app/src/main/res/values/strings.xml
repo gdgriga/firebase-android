@@ -2,4 +2,8 @@
     <string name="app_name">Firebase</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="create_task">Create New Task</string>
+    <string name="task_name">Task Name</string>
+    <string name="task_summary">Summary</string>
+    <string name="create_task_button_text">Create</string>
 </resources>
