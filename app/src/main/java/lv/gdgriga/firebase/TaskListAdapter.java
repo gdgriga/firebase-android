@@ -15,12 +15,13 @@ import static lv.gdgriga.firebase.R.layout.fragment_task;
 
 public class TaskListAdapter extends ArrayAdapter<Task> {
     private final LayoutInflater layout;
-    private final List<Task> tasks;
+    private List<Task> tasks;
 
     public TaskListAdapter(Context context, int resource, List<Task> tasks) {
         super(context, resource, tasks);
         layout = ((Activity) context).getLayoutInflater();
         this.tasks = tasks;
+        setNotifyOnChange(true);
     }
 
     @Override
@@ -29,5 +30,10 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         TextView taskTitle = (TextView) taskView.findViewById(task_title);
         taskTitle.setText(tasks.get(position).title);
         return taskView;
+    }
+
+    void refresh(List<Task> tasks) {
+        clear();
+        addAll(tasks);
     }
 }

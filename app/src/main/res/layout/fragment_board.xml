@@ -9,13 +9,15 @@
                 tools:context="lv.gdgriga.firebase.ColumnFragment">
 
     <TextView
-        android:id="@+id/section_label"
+        android:id="@+id/column_label"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:textSize="32sp"
+        android:gravity="center"/>
 
     <ListView
         android:id="@+id/task_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/section_label"/>
+        android:layout_below="@id/column_label"/>
 </RelativeLayout>
