@@ -42,11 +42,10 @@ public class BoardActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(columnPager);
 
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(view -> {
-            new CreateTaskDialog(view.getContext(), (ColumnFragment) columnPager.fragments.get(0)).show();
-        });
+        fab.setOnClickListener(view -> new CreateTaskDialog(
+            view.getContext(), (ColumnFragment) columnPager.getItem(mViewPager.getCurrentItem())
+        ).show());
     }
 
     @Override

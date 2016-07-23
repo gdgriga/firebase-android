@@ -9,7 +9,6 @@ import android.widget.EditText;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static lv.gdgriga.firebase.Column.ToDo;
 import static lv.gdgriga.firebase.R.id.create_task_button;
 import static lv.gdgriga.firebase.R.id.task_name;
 import static lv.gdgriga.firebase.R.id.task_summary;
@@ -21,11 +20,11 @@ class CreateTaskDialog extends Dialog {
     @BindView(task_name) EditText taskName;
     @BindView(task_summary) EditText taskSummary;
     @BindView(create_task_button) Button createTask;
-    private final ColumnFragment toDoColumn;
+    private final ColumnFragment fragment;
 
-    CreateTaskDialog(Context context, ColumnFragment toDoColumn) {
+    CreateTaskDialog(Context context, ColumnFragment fragment) {
         super(context);
-        this.toDoColumn = toDoColumn;
+        this.fragment = fragment;
     }
 
     @Override
@@ -35,8 +34,8 @@ class CreateTaskDialog extends Dialog {
         ButterKnife.bind(this);
         setTitle(create_task);
         createTask.setOnClickListener((view) -> {
-            tasks.add(new Task(taskName.getText().toString(), taskSummary.getText().toString(), ToDo));
-            toDoColumn.refresh();
+            tasks.add(new Task(taskName.getText().toString(), taskSummary.getText().toString(), fragment.getColumn()));
+            fragment.refresh();
             dismiss();
         });
     }

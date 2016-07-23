@@ -68,5 +68,9 @@ public class ColumnFragment extends Fragment {
         return stream(tasks).filter(task -> task.column == column)
                             .collect(toList());
     }
+
+    public Column getColumn() {
+        return column;
+    }
 }
 
