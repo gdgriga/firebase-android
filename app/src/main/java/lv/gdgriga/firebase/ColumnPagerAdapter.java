@@ -10,7 +10,7 @@ import static java8.util.J8Arrays.stream;
 import static java8.util.stream.Collectors.toList;
 
 class ColumnPagerAdapter extends FragmentPagerAdapter {
-    List<Fragment> fragments = stream(Column.values()).map(ColumnFragment::newInstance).collect(toList());
+    private final List<Fragment> fragments = stream(Column.values()).map(ColumnFragment::newInstance).collect(toList());
 
     ColumnPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -23,8 +23,7 @@ class ColumnPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        // Show 3 total pages.
-        return 3;
+        return Column.values().length;
     }
 
     @Override

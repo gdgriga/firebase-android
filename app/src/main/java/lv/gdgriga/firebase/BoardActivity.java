@@ -12,9 +12,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static java.util.Arrays.asList;
-import static lv.gdgriga.firebase.Column.Done;
-import static lv.gdgriga.firebase.Column.InProgress;
-import static lv.gdgriga.firebase.Column.ToDo;
+import static lv.gdgriga.firebase.Column.*;
 import static lv.gdgriga.firebase.TaskContainer.tasks;
 
 public class BoardActivity extends AppCompatActivity {
@@ -24,7 +22,7 @@ public class BoardActivity extends AppCompatActivity {
     @BindView(R.id.container) ViewPager mViewPager;
 
     static {
-        tasks.addAll(asList(new Task("A Task", "Do A", ToDo), new Task("B Task", "Do B", InProgress), new Task("C Task", "Do C", ToDo), new Task("Z Task", "Do Z", Done)));
+        tasks.addAll(asList(new Task("A Task", "Do A", Backlog), new Task("B Task", "Do B", Sprint), new Task("C Task", "Do C", InProgress), new Task("Z Task", "Do Z", Done)));
     }
 
     @Override
@@ -43,9 +41,7 @@ public class BoardActivity extends AppCompatActivity {
         mViewPager.setAdapter(columnPager);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(view -> new CreateTaskDialog(
-            view.getContext(), (ColumnFragment) columnPager.getItem(mViewPager.getCurrentItem())
-        ).show());
+        fab.setOnClickListener(view -> new CreateTaskDialog(view.getContext(), (ColumnFragment) columnPager.getItem(mViewPager.getCurrentItem())).show());
     }
 
     @Override

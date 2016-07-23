@@ -3,7 +3,8 @@ package lv.gdgriga.firebase;
 import static java.lang.Math.abs;
 
 enum Column {
-    ToDo("To Do"),
+    Backlog("Backlog"),
+    Sprint("Sprint"),
     InProgress("In Progress"),
     Done("Done");
 
