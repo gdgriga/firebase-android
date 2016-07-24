@@ -1,10 +1,12 @@
-package lv.gdgriga.firebase;
+package lv.gdgriga.firebase.board;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.List;
+
+import lv.gdgriga.firebase.Column;
 
 import static java8.util.J8Arrays.stream;
 import static java8.util.stream.Collectors.toList;

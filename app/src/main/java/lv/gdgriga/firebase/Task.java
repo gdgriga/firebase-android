@@ -1,15 +1,17 @@
 package lv.gdgriga.firebase;
 
-class Task {
-    final String title;
-    final User assignee;
-    final String attachment;
-    final Column column;
+public class Task {
+    public String title;
+    public User assignee;
+    public String attachment;
+    public Column column;
 
-    Task(String title, User assignee, String attachment, Column column) {
+    public Task() {
+    }
+
+    public Task(String title, User assignee, Column column) {
         this.title = title;
         this.assignee = assignee;
-        this.attachment = attachment;
         this.column = column;
     }
 }

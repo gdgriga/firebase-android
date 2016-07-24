@@ -6,7 +6,7 @@
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
                                                  android:fitsSystemWindows="true"
-                                                 tools:context="lv.gdgriga.firebase.BoardActivity">
+                                                 tools:context="lv.gdgriga.firebase.board.BoardActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -34,7 +34,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/create_new_task_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"

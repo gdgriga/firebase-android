@@ -1,6 +1,6 @@
 package lv.gdgriga.firebase;
 
-class User {
+public class User {
     final String name;
     final String avatar;
 

@@ -1,4 +1,4 @@
-package lv.gdgriga.firebase;
+package lv.gdgriga.firebase.board;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,13 +12,15 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import lv.gdgriga.firebase.Column;
+import lv.gdgriga.firebase.Task;
 
 import static java8.util.stream.Collectors.toList;
 import static java8.util.stream.StreamSupport.stream;
 import static lv.gdgriga.firebase.R.id.column_label;
 import static lv.gdgriga.firebase.R.id.task_list;
 import static lv.gdgriga.firebase.R.layout.fragment_board;
-import static lv.gdgriga.firebase.R.layout.fragment_task;
+import static lv.gdgriga.firebase.R.layout.view_task;
 import static lv.gdgriga.firebase.TaskContainer.tasks;
 
 /**
@@ -54,8 +56,8 @@ public class ColumnFragment extends Fragment {
         View rootView = inflater.inflate(fragment_board, container, false);
         ButterKnife.bind(this, rootView);
         column = Column.fromInt(getArguments().getInt(ARG_COLUMN));
+        adapter = new TaskListAdapter(container.getContext(), view_task, thisColumnTasks());
         columnLabel.setText(column.toString());
-        adapter = new TaskListAdapter(taskList.getContext(), fragment_task, thisColumnTasks());
         taskList.setAdapter(adapter);
         return rootView;
     }

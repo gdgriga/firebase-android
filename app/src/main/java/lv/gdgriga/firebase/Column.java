@@ -2,7 +2,7 @@ package lv.gdgriga.firebase;
 
 import static java.lang.Math.abs;
 
-enum Column {
+public enum Column {
     Backlog("Backlog"),
     Sprint("Sprint"),
     InProgress("In Progress"),
@@ -14,11 +14,10 @@ enum Column {
         this.readableName = readableName;
     }
 
-    static Column fromInt(int n) {
+    public static Column fromInt(int n) {
         if (abs(n) >= values().length) throw new IllegalArgumentException();
         return values()[n];
     }
-
 
     @Override
     public String toString() {
