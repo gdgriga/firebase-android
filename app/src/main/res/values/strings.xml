@@ -6,4 +6,5 @@
     <string name="task_name">Task Name</string>
     <string name="task_summary">Summary</string>
     <string name="create_task_button_text">Create</string>
+    <string name="assign_to">Assign to…</string>
 </resources>

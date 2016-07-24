@@ -14,6 +14,7 @@ import butterknife.ButterKnife;
 import static java.util.Arrays.asList;
 import static lv.gdgriga.firebase.Column.*;
 import static lv.gdgriga.firebase.TaskContainer.tasks;
+import static lv.gdgriga.firebase.UserContainer.users;
 
 public class BoardActivity extends AppCompatActivity {
     /**
@@ -22,7 +23,11 @@ public class BoardActivity extends AppCompatActivity {
     @BindView(R.id.container) ViewPager mViewPager;
 
     static {
-        tasks.addAll(asList(new Task("A Task", "Do A", Backlog), new Task("B Task", "Do B", Sprint), new Task("C Task", "Do C", InProgress), new Task("Z Task", "Do Z", Done)));
+        tasks.addAll(asList(
+            new Task("A Task", users.get(0), "", Backlog),
+            new Task("B Task", users.get(2), "", Sprint),
+            new Task("C Task", users.get(3), "", InProgress),
+            new Task("Z Task", users.get(1), "", Done)));
     }
 
     @Override

@@ -13,11 +13,11 @@ import java.util.List;
 import static lv.gdgriga.firebase.R.id.task_title;
 import static lv.gdgriga.firebase.R.layout.fragment_task;
 
-public class TaskListAdapter extends ArrayAdapter<Task> {
+class TaskListAdapter extends ArrayAdapter<Task> {
     private final LayoutInflater layout;
     private List<Task> tasks;
 
-    public TaskListAdapter(Context context, int resource, List<Task> tasks) {
+    TaskListAdapter(Context context, int resource, List<Task> tasks) {
         super(context, resource, tasks);
         layout = ((Activity) context).getLayoutInflater();
         this.tasks = tasks;
