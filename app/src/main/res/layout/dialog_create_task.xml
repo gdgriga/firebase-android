@@ -19,7 +19,7 @@
         android:spinnerMode="dropdown"/>
 
     <ImageButton
-        android:id="@+id/choose_attachemnt_button"
+        android:id="@+id/choose_attachment_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/assignee_spinner"
@@ -31,6 +31,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/choose_attachemnt_button"
+        android:layout_below="@id/choose_attachment_button"
         android:text="@string/create_task_button_text"/>
 </RelativeLayout>

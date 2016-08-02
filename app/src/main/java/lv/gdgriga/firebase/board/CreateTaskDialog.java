@@ -57,7 +57,7 @@ class CreateTaskDialog extends Dialog implements AttachmentSelectedListener {
         dismiss();
     }
 
-    @OnClick(choose_attachemnt_button)
+    @OnClick(choose_attachment_button)
     public void onChooseAttachmentButtonClick() {
         startActivityForResult(parent, new Intent(ACTION_PICK, EXTERNAL_CONTENT_URI), PICK_ATTACHMENT, new Bundle());
     }
