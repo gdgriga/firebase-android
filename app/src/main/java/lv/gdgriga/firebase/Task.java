@@ -9,7 +9,7 @@ public class Task {
     public Task() {
     }
 
-    public Task(String title, User assignee, Column column) {
+    Task(String title, User assignee, Column column) {
         this.title = title;
         this.assignee = assignee;
         this.column = column;
