@@ -24,16 +24,18 @@ import static lv.gdgriga.firebase.TaskContainer.tasks;
 class CreateTaskDialog extends Dialog implements AttachmentSelectedListener {
     static final int PICK_ATTACHMENT = 1337;
     private final BoardActivity parent;
-    private final ColumnFragment fragment;
+    private final Column column;
+    private final ColumnPagerAdapter columnPager;
     private final Task task = new Task();
     @BindView(task_name) EditText taskName;
     @BindView(assignee_spinner) Spinner assignee;
     @BindView(create_task_button) Button createTask;
 
-    CreateTaskDialog(BoardActivity parent, ColumnFragment fragment) {
+    CreateTaskDialog(BoardActivity parent, Column column, ColumnPagerAdapter columnPager) {
         super(parent);
         this.parent = parent;
-        this.fragment = fragment;
+        this.column = column;
+        this.columnPager = columnPager;
         parent.subscribeForAttachmentSelected(this);
     }
 
@@ -50,9 +52,9 @@ class CreateTaskDialog extends Dialog implements AttachmentSelectedListener {
     public void onCreateTaskClick() {
         task.title = taskName.getText().toString();
         task.assignee = (User) assignee.getSelectedItem();
-        task.column = fragment.getColumn();
+        task.column = column;
         tasks.add(task);
-        fragment.refresh();
+        columnPager.notifyDataSetChanged();
         parent.unsubscribeFromAttachmentSelected(this);
         dismiss();
     }

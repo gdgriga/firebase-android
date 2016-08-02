@@ -29,6 +29,11 @@ class ColumnPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
+
+    @Override
     public CharSequence getPageTitle(int position) {
         return Column.fromInt(position).toString();
     }

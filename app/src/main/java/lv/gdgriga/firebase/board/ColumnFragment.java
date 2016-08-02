@@ -23,26 +23,14 @@ import static lv.gdgriga.firebase.R.layout.fragment_board;
 import static lv.gdgriga.firebase.R.layout.view_task;
 import static lv.gdgriga.firebase.TaskContainer.tasks;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class ColumnFragment extends Fragment {
-    /**
-     * The fragment argument representing the section number for this
-     * fragment.
-     */
     private static final String ARG_COLUMN = "column";
 
     @BindView(column_label) TextView columnLabel;
     @BindView(task_list) ListView taskList;
 
     private Column column;
-    private TaskListAdapter adapter;
 
-    /**
-     * Returns a new instance of this fragment for the given section
-     * number.
-     */
     static ColumnFragment newInstance(Column column) {
         ColumnFragment fragment = new ColumnFragment();
         Bundle args = new Bundle();
@@ -56,23 +44,14 @@ public class ColumnFragment extends Fragment {
         View rootView = inflater.inflate(fragment_board, container, false);
         ButterKnife.bind(this, rootView);
         column = Column.fromInt(getArguments().getInt(ARG_COLUMN));
-        adapter = new TaskListAdapter(container.getContext(), view_task, thisColumnTasks());
+        taskList.setAdapter(new TaskListAdapter(container.getContext(), view_task, thisColumnTasks()));
         columnLabel.setText(column.toString());
-        taskList.setAdapter(adapter);
         return rootView;
-    }
-
-    void refresh() {
-        adapter.refresh(thisColumnTasks());
     }
 
     private List<Task> thisColumnTasks() {
         return stream(tasks).filter(task -> task.column == column)
                             .collect(toList());
-    }
-
-    public Column getColumn() {
-        return column;
     }
 }
 

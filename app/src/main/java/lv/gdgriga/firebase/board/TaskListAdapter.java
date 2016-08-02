@@ -22,9 +22,4 @@ class TaskListAdapter extends ArrayAdapter<Task> {
     public View getView(int position, View convertView, ViewGroup parent) {
         return new TaskViewBuilder(getContext(), parent, tasks.get(position)).buildView();
     }
-
-    void refresh(List<Task> tasks) {
-        clear();
-        addAll(tasks);
-    }
 }

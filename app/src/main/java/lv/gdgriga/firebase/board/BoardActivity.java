@@ -15,6 +15,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import lv.gdgriga.firebase.Column;
 import lv.gdgriga.firebase.R;
 import lv.gdgriga.firebase.util.PathFromUriResolver;
 
@@ -29,9 +30,6 @@ public class BoardActivity extends AppCompatActivity {
         void attachmentSelected(String attachment);
     }
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     @BindView(container) ViewPager mViewPager;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(create_new_task_button) FloatingActionButton createNewTaskButton;
@@ -46,15 +44,12 @@ public class BoardActivity extends AppCompatActivity {
 
         resolver = PathFromUriResolver.fromContext(getBaseContext());
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        ColumnPagerAdapter columnPager = new ColumnPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
+        ColumnPagerAdapter columnPager = new ColumnPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(columnPager);
 
-        createNewTaskButton.setOnClickListener(view -> new CreateTaskDialog(this,
-            (ColumnFragment) columnPager.getItem(mViewPager.getCurrentItem())
+        createNewTaskButton.setOnClickListener(view -> new CreateTaskDialog(
+            this, Column.fromInt(mViewPager.getCurrentItem()), columnPager
         ).show());
     }
 
