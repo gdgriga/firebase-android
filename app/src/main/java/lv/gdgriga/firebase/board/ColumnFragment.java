@@ -25,11 +25,9 @@ import static lv.gdgriga.firebase.TaskContainer.tasks;
 
 public class ColumnFragment extends Fragment {
     private static final String ARG_COLUMN = "column";
-
+    private Column column;
     @BindView(column_label) TextView columnLabel;
     @BindView(task_list) ListView taskList;
-
-    private Column column;
 
     static ColumnFragment newInstance(Column column) {
         ColumnFragment fragment = new ColumnFragment();
