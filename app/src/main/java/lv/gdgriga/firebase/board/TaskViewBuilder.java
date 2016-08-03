@@ -12,6 +12,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import lv.gdgriga.firebase.Task;
 
+import static android.content.ClipData.newPlainText;
 import static lv.gdgriga.firebase.R.id.task_attachment_image;
 import static lv.gdgriga.firebase.R.id.task_title;
 import static lv.gdgriga.firebase.R.layout.view_task;
@@ -36,6 +37,14 @@ class TaskViewBuilder {
         if (task.attachment != null) {
             new AttachmentBitmapSetter(taskView.getResources(), taskAttachment).execute(task.attachment);
         }
+        taskView.setOnLongClickListener(this::onLongClick);
         return taskView;
+    }
+
+    private boolean onLongClick(View view) {
+        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+        view.startDrag(newPlainText("taskId", task.id), shadowBuilder, view, 0);
+        view.setVisibility(View.INVISIBLE);
+        return true;
     }
 }
