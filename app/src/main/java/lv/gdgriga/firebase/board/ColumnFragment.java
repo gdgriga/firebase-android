@@ -1,6 +1,7 @@
 package lv.gdgriga.firebase.board;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,12 +40,16 @@ public class ColumnFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(fragment_board, container, false);
-        ButterKnife.bind(this, rootView);
+        return inflater.inflate(fragment_board, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
         column = Column.fromInt(getArguments().getInt(ARG_COLUMN));
-        taskList.setAdapter(new TaskListAdapter(container.getContext(), view_task, thisColumnTasks()));
+        taskList.setAdapter(new TaskListAdapter(view.getContext(), view_task, thisColumnTasks()));
         columnLabel.setText(column.toString());
-        return rootView;
     }
 
     private List<Task> thisColumnTasks() {
