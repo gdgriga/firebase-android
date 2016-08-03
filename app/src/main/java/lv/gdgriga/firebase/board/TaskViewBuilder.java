@@ -2,7 +2,6 @@ package lv.gdgriga.firebase.board;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import lv.gdgriga.firebase.Task;
 import static lv.gdgriga.firebase.R.id.task_attachment_image;
 import static lv.gdgriga.firebase.R.id.task_title;
 import static lv.gdgriga.firebase.R.layout.view_task;
-import static lv.gdgriga.firebase.util.AttachmentDecoder.decodeBitmap;
 
 class TaskViewBuilder {
     private final LayoutInflater layout;
@@ -36,7 +34,7 @@ class TaskViewBuilder {
         ButterKnife.bind(this, taskView);
         taskTitle.setText(task.title);
         if (task.attachment != null) {
-            taskAttachment.setImageDrawable(new BitmapDrawable(taskView.getResources(), decodeBitmap(task.attachment)));
+            new AttachmentBitmapSetter(taskView.getResources(), taskAttachment).execute(task.attachment);
         }
         return taskView;
     }
