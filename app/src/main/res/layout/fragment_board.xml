@@ -17,7 +17,8 @@
 
     <ListView
         android:id="@+id/task_list"
-        android:layout_width="match_parent"
+        android:layout_below="@id/column_label"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/column_label"/>
+        android:paddingBottom="50dp"/>
 </RelativeLayout>
