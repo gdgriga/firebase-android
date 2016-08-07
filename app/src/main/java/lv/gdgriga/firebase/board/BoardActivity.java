@@ -1,12 +1,14 @@
 package lv.gdgriga.firebase.board;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,7 @@ import lv.gdgriga.firebase.util.PathFromUriResolver;
 
 import static java.lang.System.currentTimeMillis;
 import static java8.util.stream.StreamSupport.stream;
+import static lv.gdgriga.firebase.R.id.avatar;
 import static lv.gdgriga.firebase.R.id.container;
 import static lv.gdgriga.firebase.R.id.create_new_task_button;
 import static lv.gdgriga.firebase.R.layout.activity_board;
@@ -35,6 +38,7 @@ public class BoardActivity extends AppCompatActivity {
     @BindView(container) ViewPager mViewPager;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(create_new_task_button) FloatingActionButton createNewTaskButton;
+    @BindView(avatar) ImageView avatarImage;
     private PathFromUriResolver resolver;
     private ColumnPagerAdapter columnPager;
     private List<AttachmentSelectedListener> attachmentSelectedListeners = new ArrayList<>();
@@ -56,6 +60,8 @@ public class BoardActivity extends AppCompatActivity {
         createNewTaskButton.setOnClickListener(view -> new CreateTaskDialog(
             this, Column.fromInt(mViewPager.getCurrentItem()), this
         ).show());
+
+        avatarImage.setImageBitmap(BitmapFactory.decodeFile("/storage/sdcard0/Download/Me.png"));
     }
 
     @Override
