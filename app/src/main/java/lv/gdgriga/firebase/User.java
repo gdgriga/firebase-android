@@ -1,10 +1,12 @@
 package lv.gdgriga.firebase;
 
-public class User {
-    final String name;
-    final String avatar;
+import java8.util.Optional;
 
-    User(String name, String avatar) {
+public class User {
+    private final String name;
+    private final Optional<String> avatar;
+
+    public User(String name, Optional<String> avatar) {
         this.name = name;
         this.avatar = avatar;
     }
@@ -12,5 +14,13 @@ public class User {
     @Override
     public String toString() {
         return name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Optional<String> getAvatar() {
+        return avatar;
     }
 }
