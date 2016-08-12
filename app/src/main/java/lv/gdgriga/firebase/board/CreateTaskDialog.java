@@ -3,7 +3,9 @@ package lv.gdgriga.firebase.board;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,17 +27,14 @@ class CreateTaskDialog extends Dialog implements AttachmentSelectedListener {
     static final int PICK_ATTACHMENT = 1337;
     private final BoardActivity parent;
     private final Column column;
-    private final BoardActivity board;
     private final Task task = new Task();
     @BindView(task_name) EditText taskName;
     @BindView(assignee_spinner) Spinner assignee;
-    @BindView(create_task_button) Button createTask;
 
-    CreateTaskDialog(BoardActivity parent, Column column, BoardActivity board) {
+    CreateTaskDialog(BoardActivity parent, Column column) {
         super(parent);
         this.parent = parent;
         this.column = column;
-        this.board = board;
         parent.subscribeForAttachmentSelected(this);
     }
 
@@ -54,7 +53,7 @@ class CreateTaskDialog extends Dialog implements AttachmentSelectedListener {
         task.assignee = (User) assignee.getSelectedItem();
         task.column = column;
         tasks.add(task);
-        board.updateColumns();
+        parent.updateColumns();
         parent.unsubscribeFromAttachmentSelected(this);
         dismiss();
     }

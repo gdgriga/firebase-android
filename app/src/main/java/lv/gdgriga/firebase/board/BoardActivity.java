@@ -58,7 +58,7 @@ public class BoardActivity extends AppCompatActivity {
         mViewPager.setOffscreenPageLimit(3);
 
         createNewTaskButton.setOnClickListener(view -> new CreateTaskDialog(
-            this, Column.fromInt(mViewPager.getCurrentItem()), this
+            this, Column.fromInt(mViewPager.getCurrentItem())
         ).show());
 
         avatarImage.setImageBitmap(BitmapFactory.decodeFile("/storage/sdcard0/Download/Me.png"));
