@@ -3,10 +3,10 @@ package lv.gdgriga.firebase;
 import static java.lang.Math.abs;
 
 public enum Column {
-    Backlog("Backlog"),
-    Sprint("Sprint"),
-    InProgress("In Progress"),
-    Done("Done");
+    backlog("Backlog"),
+    sprint("Sprint"),
+    in_progress("In Progress"),
+    done("Done");
 
     private final String readableName;
 

@@ -1,22 +1,49 @@
 package lv.gdgriga.firebase;
 
-import java.util.UUID;
-
 public class Task {
-    public final String id;
     public String title;
-    public User assignee;
+    public String assignee;
     public String attachment;
-    public Column column;
+    public String collection;
 
-    public Task() {
-        id = UUID.randomUUID().toString();
+    public String getTitle() {
+        return title;
     }
 
-    Task(String title, User assignee, Column column) {
-        this();
+    public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(String assignee) {
         this.assignee = assignee;
-        this.column = column;
+    }
+
+    public String getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
+    }
+
+    public String getCollection() {
+        return collection;
+    }
+
+    public void setCollection(String collection) {
+        this.collection = collection;
+    }
+
+    public Task copy() {
+        Task copy = new Task();
+        copy.title = title;
+        copy.assignee = assignee;
+        copy.attachment = attachment;
+        copy.collection = collection;
+        return copy;
     }
 }
