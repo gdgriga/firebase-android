@@ -7,5 +7,17 @@
     <string name="task_summary">Summary</string>
     <string name="create_task_button_text">Create</string>
     <string name="assign_to">Assign to…</string>
-    <string name="log_in">Log In</string>
+    <string name="log_in">Sign In</string>
+    <string name="edit_task">Edit Task</string>
+    <string name="apply">Apply</string>
+    <string name="delete_attachment">Delete Attachment</string>
+    <string name="delete_task">Delete Task</string>
+    <string name="lets_shake_hands">Let\'s Shake Hands!</string>
+    <string name="baby_lets_shake_hands">Baby, let\'s shake hands!</string>
+    <string name="lets_be_friends">Let\'s be friends!</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="fetch_config">Fetch Configuration</string>
+    <string name="send_invitation">Send Invitation</string>
+    <string name="crash_burn">Crash and Burn</string>
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
 </resources>

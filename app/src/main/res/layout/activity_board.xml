@@ -16,10 +16,10 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/toolbar_widget"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="?attr/colorPrimaryDark"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
@@ -28,11 +28,10 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="end">
 
-                <ImageView
+                <ImageButton
                     android:id="@+id/avatar"
                     android:layout_width="?attr/actionBarSize"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="@color/colorAccent"
                     android:gravity="end"/>
             </LinearLayout>
         </android.support.v7.widget.Toolbar>
@@ -52,6 +51,6 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_menu_add"
-        app:backgroundTint="@color/colorPrimary"/>
+        app:backgroundTint="@color/colorPrimaryDark"/>
 
 </android.support.design.widget.CoordinatorLayout>

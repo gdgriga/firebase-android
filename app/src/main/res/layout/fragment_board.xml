@@ -13,9 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="32sp"/>
+        android:textSize="32sp"
+        android:paddingBottom="10dp"/>
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/task_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
