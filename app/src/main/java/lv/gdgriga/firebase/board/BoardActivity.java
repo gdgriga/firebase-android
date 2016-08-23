@@ -1,47 +1,41 @@
 package lv.gdgriga.firebase.board;
 
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
-import android.widget.ImageView;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import lv.gdgriga.firebase.Column;
 import lv.gdgriga.firebase.R;
-import lv.gdgriga.firebase.util.PathFromUriResolver;
+import lv.gdgriga.firebase.User;
+import lv.gdgriga.firebase.analytics.Analytics;
+import lv.gdgriga.firebase.database.FirebaseDb;
+import lv.gdgriga.firebase.invites.InvitationsActivity;
+import lv.gdgriga.firebase.remote_config.RemoteConfig;
+import lv.gdgriga.firebase.user_management.GoogleUser;
+import lv.gdgriga.firebase.util.AsyncBitmapLoader;
 
+import static android.graphics.BitmapFactory.decodeResource;
+import static android.graphics.Color.parseColor;
 import static java.lang.System.currentTimeMillis;
-import static java8.util.stream.StreamSupport.stream;
-import static lv.gdgriga.firebase.R.id.avatar;
-import static lv.gdgriga.firebase.R.id.container;
-import static lv.gdgriga.firebase.R.id.create_new_task_button;
+import static lv.gdgriga.firebase.R.id.*;
 import static lv.gdgriga.firebase.R.layout.activity_board;
+import static lv.gdgriga.firebase.R.menu.menu_board;
 import static lv.gdgriga.firebase.board.ColumnFlip.RIGHT;
-import static lv.gdgriga.firebase.board.CreateTaskDialog.PICK_ATTACHMENT;
 
 public class BoardActivity extends AppCompatActivity {
-    interface AttachmentSelectedListener {
-        void attachmentSelected(String attachment);
-    }
-
     public static final int flipDelay = 500;
-
     @BindView(container) ViewPager mViewPager;
-    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(toolbar_widget) Toolbar toolbar;
     @BindView(create_new_task_button) FloatingActionButton createNewTaskButton;
-    @BindView(avatar) ImageView avatarImage;
-    private PathFromUriResolver resolver;
-    private ColumnPagerAdapter columnPager;
-    private List<AttachmentSelectedListener> attachmentSelectedListeners = new ArrayList<>();
+    @BindView(avatar) ImageButton avatarImage;
     private long lastFlip;
 
     @Override
@@ -50,39 +44,56 @@ public class BoardActivity extends AppCompatActivity {
         setContentView(activity_board);
         ButterKnife.bind(this);
 
-        resolver = PathFromUriResolver.fromContext(getBaseContext());
         setSupportActionBar(toolbar);
 
-        columnPager = new ColumnPagerAdapter(getSupportFragmentManager());
+        ColumnPagerAdapter columnPager = new ColumnPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(columnPager);
         mViewPager.setOffscreenPageLimit(3);
 
-        createNewTaskButton.setOnClickListener(view -> new CreateTaskDialog(
-            this, Column.fromInt(mViewPager.getCurrentItem())
-        ).show());
+        createNewTaskButton.setOnClickListener(view -> {
+            Intent createTask = new Intent(this, CreateTaskActivity.class);
+            createTask.putExtra("taskColumn", mViewPager.getCurrentItem());
+            startActivity(createTask);
+        });
 
-        avatarImage.setImageBitmap(BitmapFactory.decodeFile("/storage/sdcard0/Download/Me.png"));
+        avatarImage.setOnClickListener(this::onAvatarClick);
+        updateAvatar();
+        Analytics.userOpenedApp(this);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode != PICK_ATTACHMENT || resultCode != RESULT_OK) return;
-        selectAttachment(data.getData());
-        super.onActivityResult(requestCode, resultCode, data);
+    private void onAvatarClick(View view) {
+        PopupMenu popup = new PopupMenu(this, avatarImage);
+        popup.getMenuInflater().inflate(menu_board, popup.getMenu());
+        popup.setOnMenuItemClickListener(this::onMenuItemClicked);
+        popup.show();
     }
 
-    private void selectAttachment(Uri selectedImageUri) {
-        stream(attachmentSelectedListeners).forEach(listener ->
-            listener.attachmentSelected(resolver.resolve(selectedImageUri))
-        );
+    private boolean onMenuItemClicked(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case sign_out_menu:
+                setResult(RESULT_OK);
+                finish();
+                break;
+            case fetch_config:
+                RemoteConfig.fetchConfig(config ->
+                    toolbar.setBackgroundColor(parseColor(null /*TODO: get toolbar_color property from remote config*/)));
+                break;
+            case invite_menu:
+                startActivity(new Intent(this, InvitationsActivity.class));
+                break;
+            case crash_menu:
+                // TODO: Throw an exception
+        }
+        return true;
     }
 
-    void subscribeForAttachmentSelected(AttachmentSelectedListener listener) {
-        attachmentSelectedListeners.add(listener);
-    }
-
-    void unsubscribeFromAttachmentSelected(AttachmentSelectedListener listener) {
-        attachmentSelectedListeners.remove(listener);
+    public void updateAvatar() {
+        FirebaseDb.getUserByKey(GoogleUser.getUserId(), snapshot -> {
+            User user = null; // TODO: Transform snapshot to User
+            if (user.getKarma() == -1) avatarImage.setImageBitmap(decodeResource(getResources(), R.drawable.shame));
+            else if (user.getKarma() == 10) avatarImage.setImageBitmap(decodeResource(getResources(), R.drawable.glory));
+            else AsyncBitmapLoader.loadFromUrl(GoogleUser.getSignedIn().avatar).ifPresent(avatarImage::setImageBitmap);
+        });
     }
 
     void flipColumn(ColumnFlip columnFlip) {
@@ -90,9 +101,5 @@ public class BoardActivity extends AppCompatActivity {
         int nextColumn = mViewPager.getCurrentItem() + (columnFlip == RIGHT ? 1 : -1);
         mViewPager.setCurrentItem(nextColumn);
         lastFlip = currentTimeMillis();
-    }
-
-    void updateColumns() {
-        columnPager.notifyDataSetChanged();
     }
 }
