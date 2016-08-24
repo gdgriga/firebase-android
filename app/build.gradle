@@ -40,7 +40,7 @@ dependencies {
     apt 'com.jakewharton:butterknife-compiler:8.2.1'
     compile 'net.sourceforge.streamsupport:streamsupport:1.5'
 
-    // TODO: Add GMS core dependency
+    compile 'com.google.firebase:firebase-core:9.4.0'
 }
 
-// TODO: Apply GMS plugin here
+apply plugin: 'com.google.gms.google-services'
