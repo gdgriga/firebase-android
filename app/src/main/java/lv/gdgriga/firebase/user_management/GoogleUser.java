@@ -1,5 +1,7 @@
 package lv.gdgriga.firebase.user_management;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import lv.gdgriga.firebase.User;
 
 public class GoogleUser {
@@ -17,7 +19,11 @@ public class GoogleUser {
         return null;
     }
 
-    public static void signOut() {
-        // TODO: implement sign out
+    static void signOut() {
+        auth().signOut();
+    }
+
+    private static FirebaseAuth auth() {
+        return FirebaseAuth.getInstance();
     }
 }

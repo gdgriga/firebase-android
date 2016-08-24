@@ -18,6 +18,7 @@ import com.google.firebase.auth.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import lv.gdgriga.firebase.board.BoardActivity;
+import lv.gdgriga.firebase.util.ConnectionCallback;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
@@ -101,7 +102,12 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void signOut() {
-        // TODO: Implement sign out
+        GoogleUser.signOut();
+        googleClient.registerConnectionCallbacks((ConnectionCallback) bundle -> {
+            Auth.GoogleSignInApi.signOut(googleClient);
+            toast("Signed Out.");
+        });
+        googleClient.connect();
     }
 
     private void toast(String message) {
