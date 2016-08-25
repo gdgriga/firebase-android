@@ -89,7 +89,7 @@ public class BoardActivity extends AppCompatActivity {
 
     public void updateAvatar() {
         FirebaseDb.getUserByKey(GoogleUser.getUserId(), snapshot -> {
-            User user = null; // TODO: Transform snapshot to User
+            User user = snapshot.getValue(User.class);
             if (user.getKarma() == -1) avatarImage.setImageBitmap(decodeResource(getResources(), R.drawable.shame));
             else if (user.getKarma() == 10) avatarImage.setImageBitmap(decodeResource(getResources(), R.drawable.glory));
             else AsyncBitmapLoader.loadFromUrl(GoogleUser.getSignedIn().avatar).ifPresent(avatarImage::setImageBitmap);

@@ -16,8 +16,8 @@ public final class FirebaseDb {
                    .orderByChild(collection).equalTo(collectionName);
     }
 
-    public static void getUserByKey(String key, Consumer<Object /*TODO: Replace with DataSnapshot*/> onValue) {
-        // TODO: Get User by given key
+    public static void getUserByKey(String key, Consumer<DataSnapshot> onValue) {
+        db().child(users).child(key).addListenerForSingleValueEvent(new OnSingleValue(onValue));
     }
 
     public static void createUser(String uid, User user) {

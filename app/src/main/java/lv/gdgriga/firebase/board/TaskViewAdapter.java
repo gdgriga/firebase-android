@@ -59,8 +59,8 @@ class TaskViewAdapter extends FirebaseRecyclerAdapter<Task, TaskViewHolder> {
 
     private Consumer<String> setAssigneeAvatar(TaskViewHolder viewHolder) {
         return key -> FirebaseDb.getUserByKey(key, snapshot -> {
-            // TODO: Return if the snapshot doesn't exist
-            User user = /*TODO: Convert snapshot to a User*/null;
+            if (!snapshot.exists()) return;
+            User user = snapshot.getValue(User.class);
             viewHolder.assignee.setText(user.toString());
             if (user.avatar != null) {
                 AsyncBitmapLoader.loadFromUrl(user.avatar).ifPresent(bitmap ->
