@@ -49,7 +49,7 @@ public final class FirebaseDb {
     }
 
     public static void updateUser(String userKey, User user) {
-        // TODO: Update User
+        db().child(users).child(userKey).setValue(user);
     }
 
     private static DatabaseReference db() {
