@@ -1,7 +1,11 @@
 package lv.gdgriga.firebase.user_management;
 
-import com.google.firebase.auth.FirebaseAuth;
+import android.net.Uri;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java8.util.Optional;
 import lv.gdgriga.firebase.User;
 
 public class GoogleUser {
@@ -10,13 +14,23 @@ public class GoogleUser {
     }
 
     public static String getUserId() {
-        // TODO: return user id
-        return null;
+        return getCurrentUser().getUid();
     }
 
     public static User getSignedIn() {
-        // TODO: map google user to domain user
-        return null;
+        return toDomainUser(getCurrentUser());
+    }
+
+    private static FirebaseUser getCurrentUser() {
+        return auth().getCurrentUser();
+    }
+
+    private static User toDomainUser(FirebaseUser user) {
+        return new User(user.getDisplayName(), user.getEmail(), getAvatarFrom(user).orElse(null));
+    }
+
+    private static Optional<String> getAvatarFrom(FirebaseUser user) {
+        return Optional.ofNullable(user.getPhotoUrl()).map(Uri::toString);
     }
 
     static void signOut() {
