@@ -58,8 +58,8 @@ public class ColumnFragment extends Fragment {
                 taskList.scrollToPosition(positionStart);
             }
         };
-        // TODO: Register the observer in the adapter
-        // TODO: Set the adapter for the taskList
+        adapter.registerAdapterDataObserver(observer);
+        taskList.setAdapter(adapter);
         columnLabel.setText(column.toString());
         view.setOnDragListener(this::onDrag);
     }
