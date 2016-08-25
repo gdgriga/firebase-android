@@ -21,7 +21,7 @@ public final class FirebaseDb {
     }
 
     public static void createUser(String uid, User user) {
-        // TODO: Create a new user
+        db().child(users).child(uid).setValue(user);
     }
 
     public static void getAllUsers(Consumer<Object /*TODO: Replace with DataSnapshot*/> onValue) {
