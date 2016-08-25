@@ -41,7 +41,7 @@ public final class FirebaseDb {
     }
 
     public static void updateTask(String taskKey, Task task) {
-        // TODO: Update task with given key
+        db().child(tasks).child(taskKey).setValue(task);
     }
 
     public static void getTaskByKey(String taskKey, Consumer<DataSnapshot> onValue) {
