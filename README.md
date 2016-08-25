@@ -102,11 +102,11 @@ private AuthCredential fromToken(String token) {
 
 Run the app, you should see the following screen:
 
-[>>>>>]SignIn Screen[<<<<<]
+![screenshot_2016-08-25-01-08-48](https://cloud.githubusercontent.com/assets/5235166/17952236/43addf34-6a71-11e6-865c-dc587b593a19.png)
 
 After clicking on the Sign In button, the main screen should open:
 
-[>>>>>]Main Screen[<<<<<]
+![screenshot_2016-08-25-01-09-01](https://cloud.githubusercontent.com/assets/5235166/17952268/9b4d2128-6a71-11e6-8067-57cb862daf78.png)
 
 Now, let's implement sign out.
 
@@ -148,7 +148,7 @@ private static FirebaseAuth auth() {
 ```
 Run the app. On the main screen, press on the grey square in the top right corner and choose the Sign Out item in the popup menu. You should be brought back to the sign in screen and a toast "Signed Out." should appear.
 
-[>>>>>]Popup menu open[<<<<<]
+![screenshot_2016-08-25-02-23-01](https://cloud.githubusercontent.com/assets/5235166/17952295/d2765fac-6a71-11e6-99bb-847983e3acc4.png)
 
 Let's get the signed-in user's avatar. To do that we'll first convert the Firebase user to the domain **User**.
 In **GoogleUser**:
