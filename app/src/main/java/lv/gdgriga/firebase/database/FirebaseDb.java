@@ -28,8 +28,8 @@ public final class FirebaseDb {
         // TODO: Get all users
     }
 
-    public static void changeTaskColumn(String draggedTaskKey, String newCollection) {
-        // TODO: Update task's collection field
+    public static void changeTaskColumn(String draggedTaskKey, String newColumn) {
+        db().child(tasks).child(draggedTaskKey).child(collection).setValue(newColumn);
     }
 
     public static void createTask(Task task) {
