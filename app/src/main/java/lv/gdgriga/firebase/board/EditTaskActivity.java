@@ -48,7 +48,7 @@ public class EditTaskActivity extends Activity {
         taskKey = getIntent().getStringExtra("taskKey");
         ButterKnife.bind(this);
         FirebaseDb.getTaskByKey(taskKey, snapshot -> {
-            task = /*TODO: Convert snapshot to task*/null;
+            task = snapshot.getValue(Task.class);
             taskTitle.setText(task.title);
             setupUserSpinner(task.assignee);
             if (task.attachment != null) {
