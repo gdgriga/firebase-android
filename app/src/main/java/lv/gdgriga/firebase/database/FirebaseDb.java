@@ -24,8 +24,8 @@ public final class FirebaseDb {
         db().child(users).child(uid).setValue(user);
     }
 
-    public static void getAllUsers(Consumer<Object /*TODO: Replace with DataSnapshot*/> onValue) {
-        // TODO: Get all users
+    public static void getAllUsers(Consumer<DataSnapshot> onValue) {
+        db().child(users).orderByValue().addListenerForSingleValueEvent(new OnSingleValue(onValue));
     }
 
     public static void changeTaskColumn(String draggedTaskKey, String newColumn) {
