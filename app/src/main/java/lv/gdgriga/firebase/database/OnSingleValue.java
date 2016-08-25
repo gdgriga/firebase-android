@@ -1,15 +1,27 @@
 package lv.gdgriga.firebase.database;
 
+import android.util.Log;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
 import java8.util.function.Consumer;
 
-class OnSingleValue /*TODO: Implement com.google.firebase.database.ValueEventListener*/ {
-    private final Consumer<Object /*TODO: Replace with DataSnapshot*/> onValue;
+class OnSingleValue implements ValueEventListener {
+    private final Consumer<DataSnapshot> onValue;
 
-    OnSingleValue(Consumer<Object /*TODO: Replace with DataSnapshot*/> onValue) {
+    OnSingleValue(Consumer<DataSnapshot> onValue) {
         this.onValue = onValue;
     }
 
-    // TODO: Override onDataChange
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) {
+        onValue.accept(dataSnapshot);
+    }
 
-    // TODO: Override onCancelled
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
+        Log.e("GDGFirebase", databaseError.getMessage());
+    }
 }

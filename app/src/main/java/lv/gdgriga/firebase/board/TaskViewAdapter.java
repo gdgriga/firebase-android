@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.View;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+
 import java8.util.Optional;
 import java8.util.function.Consumer;
 import lv.gdgriga.firebase.Column;
@@ -17,13 +19,14 @@ import lv.gdgriga.firebase.util.Execute;
 import static android.content.ClipData.newIntent;
 import static android.graphics.BitmapFactory.decodeStream;
 import static android.view.View.INVISIBLE;
+import static lv.gdgriga.firebase.R.layout.view_task;
 
-class TaskViewAdapter /* TODO: Extends FirebaseRecyclerAdapter<Task, TaskViewHolder> */ {
+class TaskViewAdapter extends FirebaseRecyclerAdapter<Task, TaskViewHolder> {
     TaskViewAdapter(Column column) {
-        // TODO: Provide arguments to super constructor
+        super(Task.class, view_task, TaskViewHolder.class, FirebaseDb.getTasksFor(column.name()));
     }
 
-    //TODO: @Override
+    @Override
     protected void populateViewHolder(TaskViewHolder viewHolder, Task model, int position) {
         viewHolder.taskTitle.setText(model.title);
         Optional.ofNullable(model.assignee).ifPresent(setAssigneeAvatar(viewHolder));
@@ -35,7 +38,7 @@ class TaskViewAdapter /* TODO: Extends FirebaseRecyclerAdapter<Task, TaskViewHol
                            .onUiThread(() -> viewHolder.taskAttachment.setImageBitmap(bitmap));
                 });
             }
-            String taskKey =  /* TODO: Get task key*/ null;
+            String taskKey = getRef(position >= getItemCount() ? getItemCount() - 1 : position).getKey();
             taskView.setOnLongClickListener((view) -> {
                 View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
                 Intent switchColumn = new Intent();

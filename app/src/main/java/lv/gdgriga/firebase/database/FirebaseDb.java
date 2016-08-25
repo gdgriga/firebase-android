@@ -1,5 +1,7 @@
 package lv.gdgriga.firebase.database;
 
+import com.google.firebase.database.*;
+
 import java8.util.function.Consumer;
 import lv.gdgriga.firebase.Task;
 import lv.gdgriga.firebase.User;
@@ -9,9 +11,9 @@ public final class FirebaseDb {
     private static final String users = "users";
     private static final String collection = "collection";
 
-    public static /*TODO: Replace with Query*/Object getTasksFor(String collectionName) {
-        // TODO: Get all tasks for given collection
-        return null;
+    public static Query getTasksFor(String collectionName) {
+        return db().child(tasks)
+                   .orderByChild(collection).equalTo(collectionName);
     }
 
     public static void getUserByKey(String key, Consumer<Object /*TODO: Replace with DataSnapshot*/> onValue) {
@@ -50,8 +52,7 @@ public final class FirebaseDb {
         // TODO: Update User
     }
 
-    private static Object /*TODO: Replace with DataSnapshot*/ db() {
-        // TODO: Return FirebaseDatabase reference
-        return null;
+    private static DatabaseReference db() {
+        return FirebaseDatabase.getInstance().getReference();
     }
 }
