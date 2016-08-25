@@ -37,7 +37,7 @@ public final class FirebaseDb {
     }
 
     public static void deleteTask(String taskKey) {
-        // TODO: Delete task with given key
+        db().child(tasks).child(taskKey).removeValue();
     }
 
     public static void updateTask(String taskKey, Task task) {
