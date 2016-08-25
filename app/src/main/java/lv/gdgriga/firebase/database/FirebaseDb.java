@@ -33,7 +33,7 @@ public final class FirebaseDb {
     }
 
     public static void createTask(Task task) {
-        // TODO: Create a new task
+        db().child(tasks).push().setValue(task);
     }
 
     public static void deleteTask(String taskKey) {
