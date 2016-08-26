@@ -288,7 +288,7 @@ public static void createUser(String uid, User user) {
 
 Launch the app, if all goes well, you should see the user's avatar in the top right corner.
 
-[>>>>>]Screen with user's avatar[<<<<<]
+![screenshot_2016-08-26-00-35-51](https://cloud.githubusercontent.com/assets/5235166/18006376/e7589962-6ba7-11e6-8c90-84846c7328aa.png)
 
 Now let's display the tasks.
 
@@ -304,7 +304,7 @@ public void onViewCreated(View view, Bundle savedInstanceState) {
 ```
 Launch the app, the tasks should show up.
 
-[>>>>>>>>>>]Board with tasks[<<<<<<<<<<<<<]
+![screenshot_2016-08-26-00-55-11](https://cloud.githubusercontent.com/assets/5235166/18006546/aedf4440-6ba8-11e6-9cec-af518c35d41a.png)
 
 If you try moving the tasks around, the app will crash. Let's fix that by updating the **KarmaManager**'s *updateUserKarma* method by converting the data snapshot to the **User** entity.
 ```java
@@ -381,7 +381,7 @@ public static void deleteTask(String taskKey) {
 
 Launch the app and try editing/deleting tasks.
 
-[>>>>>>>>]Edit dialog[<<<<<<<<<<<<<<<<<<]
+![screenshot_2016-08-26-01-56-24](https://cloud.githubusercontent.com/assets/5235166/18006583/e546a80c-6ba8-11e6-8b61-0775e4eaec40.png)
 
 We can edit tasks, but why not create? Implement *createTask* in **FirebasDb**:
 ```java
@@ -391,8 +391,7 @@ public static void createTask(Task task) {
 ```
 
 Launch the app, touch the floating button in the bottom right corner and try creating tasks.
-
-[>>>>>>>>>>>]Create task dialog[<<<<<<<<<<<]
+![screenshot_2016-08-26-16-22-31](https://cloud.githubusercontent.com/assets/5235166/18006664/4e78212a-6ba9-11e6-8735-daac18525250.png)
 
 [1]: https://firebase.google.com/docs/android/setup
 [2]: https://firebase.google.com
