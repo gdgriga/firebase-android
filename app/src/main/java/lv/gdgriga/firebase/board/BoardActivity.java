@@ -76,7 +76,7 @@ public class BoardActivity extends AppCompatActivity {
                 break;
             case fetch_config:
                 RemoteConfig.fetchConfig(config ->
-                    toolbar.setBackgroundColor(parseColor(null /*TODO: get toolbar_color property from remote config*/)));
+                    toolbar.setBackgroundColor(parseColor(config.getString("toolbar_color"))));
                 break;
             case invite_menu:
                 startActivity(new Intent(this, InvitationsActivity.class));
