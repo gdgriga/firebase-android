@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import lv.gdgriga.firebase.MotherKaliStartedPartyDarklyException;
 import lv.gdgriga.firebase.R;
 import lv.gdgriga.firebase.User;
 import lv.gdgriga.firebase.analytics.Analytics;
@@ -82,7 +83,7 @@ public class BoardActivity extends AppCompatActivity {
                 startActivity(new Intent(this, InvitationsActivity.class));
                 break;
             case crash_menu:
-                // TODO: Throw an exception
+                throw new MotherKaliStartedPartyDarklyException("Just checkin'");
         }
         return true;
     }
