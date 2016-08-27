@@ -391,7 +391,353 @@ public static void createTask(Task task) {
 ```
 
 Launch the app, touch the floating button in the bottom right corner and try creating tasks.
+
 ![screenshot_2016-08-26-16-22-31](https://cloud.githubusercontent.com/assets/5235166/18006664/4e78212a-6ba9-11e6-8735-daac18525250.png)
+
+## Enable Remote Storage
+> To skip this step, do:
+>
+    git checkout -f 4/storage
+
+We can create, edit and delete tasks. But wouldn't it be cool if we could add something more to them? How about an image attachment? To do that we'll need a storage. Luckily for us, Firebase comes with one.
+
+Start by adding the storage dependency to app/build.gradle:
+```groovy
+compile 'com.google.firebase:firebase-storage:9.4.0'
+```
+Now we're ready to upload! Implement *uploadAttachment* and *storage* methods in **Storage** class:
+```java
+public static void uploadAttachment(String path, Consumer<String> onSuccess) {
+    Uri uri = toUri(path);
+    storage().child(attachments).child(uri.getLastPathSegment()).putFile(uri)
+           .addOnSuccessListener(snapshot -> {
+               StorageMetadata meta = snapshot.getMetadata();
+               onSuccess.accept(toGsLink(meta.getBucket(), meta.getPath()));
+           })
+           .addOnFailureListener(error -> error(error.getMessage()));
+}
+
+private static StorageReference storage() {
+  return FirebaseStorage.getInstance().getReference();
+}
+```
+
+All operations with Firebase storage are performed through an instance reference (just like with **FirebaseDatabase**). The first call to *child* selects the folder for our file (which is "attachments"), the second sets the name of the uploaded file (which we get from the URI). *toGsLink* assembles a URI in Firebase storage format (gs://<bucket>/<path>). It's shorter than a usual URL and Firebase can work with both formats. *putFile* then leaves us with an **UploadTask** that we have to register the success and failure listeners on.
+
+Let's implement attachment downloading. Implement *getAttachmentStream* and *storage(url)* in the same **Storage** class.
+
+```java
+public static void getAttachmentStream(String url, Consumer<InputStream> onSuccess) {
+    storage(url).ifPresent(ref ->
+        ref.getStream((snapshot, stream) -> {
+            try {
+                onSuccess.accept(stream);
+                stream.close();
+            } catch (IOException e) {
+                error(e.getMessage());
+            }
+        }).addOnFailureListener(error -> error(error.getMessage())));
+}
+
+private static Optional<StorageReference> storage(String url) {
+    try {
+        return Optional.of(FirebaseStorage.getInstance().getReferenceFromUrl(url));
+    } catch (IllegalArgumentException e) {
+        return Optional.empty();
+    }
+}
+```
+
+Getting a reference from a URL is a bit trickier, because we need to account for malformed URLs. That's why we wrap the value in an Optional. If a reference was acquired, we call *getStream* which accepts an instance of **com.google.firebase.storage.StreamDownloadTask.StreamProcessor** (we pass it as a lambda). All you need to do here is pass the stream to the *onSuccess* consumer. And then, preferably, close it.
+
+Lastly, let's implement deletion (which is the easiest of the three). In **Storage**:
+```java
+public static void deleteAttachment(String url) {
+    storage(url).ifPresent(StorageReference::delete);
+}
+```
+
+Launch the app, and try creating a task with an attachment. Let the attachment load before hitting the apply button. If all goes well, the task will be viewed with the attachment. Edit the task to delete the attachment, it should work as well.
+
+[>>>>>>>>>]Tasks with Attachments[<<<<<<<<<]
+
+## Enable Notifications
+> To skip this step, do:
+>
+    git checkout -f 5/notifications
+
+Firebase Cloud Messaging (FCM) makes notifications simple. You can easily send them to your users based on their device, language, app version, etc.
+
+To enable FCM, you first need to extend **com.google.firebase.messaging.FirebaseMessagingService**:
+```java
+package lv.gdgriga.firebase.notifications;
+
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
+
+public class MessagingService extends FirebaseMessagingService {
+    @Override
+    public void onMessageReceived(RemoteMessage remoteMessage) {
+        super.onMessageReceived(remoteMessage);
+    }
+}
+```
+In *onMessageReceived* you're getting an instance of the message for processing, we'll simply delegate the actions to the **FirebaseMessagingService**.
+
+You can create custom message groups (Topics) and subscribe to them. To do that, extend the **com.google.firebase.iid.FirebaseInstanceIdService**:
+```java
+package lv.gdgriga.firebase.notifications;
+
+import android.util.Log;
+
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+public class InstanceIdService extends FirebaseInstanceIdService {
+    private static final String topic = "board_updates";
+
+    @Override
+    public void onTokenRefresh() {
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.e("Token", token);
+        FirebaseMessaging.getInstance().subscribeToTopic(topic);
+    }
+}
+```
+You'll also need to add the services under manifest's application tag:
+```xml
+<service
+    android:name=".notifications.MessagingService"
+    android:exported="false">
+    <intent-filter>
+        <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+    </intent-filter>
+</service>
+<service
+    android:name=".notifications.InstanceIdService"
+    android:exported="false">
+    <intent-filter>
+        <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+    </intent-filter>
+</service>
+```
+
+Launch the app and put it in background. Go to the [project's console][7] and send the notification to your device.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+## Remote Configuration
+> To skip this step, do:
+>
+    git checkout -f 6/remote-config
+
+Firebase allows your app to have a remotely-stored configuration. In the Remote Config section of the [console][7] create a parameter with name *toolbar_color* and set it to whichever color you like (#ffd25a, for example).
+
+We'll implement all the necessary logic in the **RemoteConfig** class.
+```java
+package lv.gdgriga.firebase.remote_config;
+
+import android.util.Log;
+
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+
+import java.util.HashMap;
+
+import java8.util.function.Consumer;
+
+public final class RemoteConfig {
+    private final FirebaseRemoteConfig config;
+
+    private RemoteConfig() {
+        this.config = FirebaseRemoteConfig.getInstance();
+        setup();
+    }
+
+    public static void fetchConfig(Consumer<FirebaseRemoteConfig> onSuccess) {
+        new RemoteConfig().fetch(onSuccess);
+    }
+
+    private void setup() {
+        FirebaseRemoteConfigSettings settings = new FirebaseRemoteConfigSettings.Builder()
+            .setDeveloperModeEnabled(true)
+            .build();
+
+        config.setConfigSettings(settings);
+        config.setDefaults(new HashMap<String, Object>() {{
+            put("toolbar_color", "#303F9F");
+        }});
+    }
+
+    private void fetch(Consumer<FirebaseRemoteConfig> onSuccess) {
+        config.fetch(cacheExpiration())
+              .addOnSuccessListener(nothing -> {
+                  config.activateFetched();
+                  onSuccess.accept(config);
+              })
+              .addOnFailureListener(error -> {
+                  Log.e(getClass().getName(), error.getMessage());
+                  onSuccess.accept(config);
+              });
+    }
+
+    private long cacheExpiration() {
+        return config.getInfo().getConfigSettings().isDeveloperModeEnabled() ? 0 : 3600;
+    }
+}
+```
+
+All the operations happen through an instance of **FirebaseRemoteConfig**. First you need to set it up by providing the settings which you build with the appropriate builder. Then you need to set the defaults in case values couldn't be fetched. Finally, when actually fetching the configuration, you need to set the cache expiration time and add the listeners for success and failure cases. After the data was fetched, we have to activate it.
+
+Let's make it possible for the user to trigger configuration fetching by clicking on the section in the popup menu.
+
+```java
+case fetch_config:
+    RemoteConfig.fetchConfig(config ->
+        toolbar.setBackgroundColor(parseColor(config.getString("toolbar_color"))));
+    break;
+```
+
+Launch the app and choose the *Fetch Configuration* option from the menu. The color of the toolbar should change.
+
+[>>>>>>>>]Yellow Toolbar[<<<<<<<<<<<<<<<<<<]
+
+## Send Installation Invitations
+> To skip this step, do:
+>
+    git checkout -f 7/install-invites
+
+Firebase provides the possibility to send install invitations.
+
+app/build.gradle:
+```java
+compile 'com.google.android.gms:play-services-appinvite:9.4.0'
+```
+
+Inside the *onCreate* method of the **InvitationsActivity** build the invitations API and register the connection callback on it. When the API connection happens, the *sendInvitation* method will be invoked. Inside it, build the intent to send an invitation at start an activity for result (this same activity):
+```java
+@Override
+   protected void onCreate(Bundle savedInstanceState) {
+       super.onCreate(savedInstanceState);
+       GoogleApiClient client = new GoogleApiClient.Builder(this)
+           .enableAutoManage(this, connectionResult ->
+               Log.e(INVITATIONS, "Connection failed: " + connectionResult))
+           .addApi(Auth.GOOGLE_SIGN_IN_API).addApi(AppInvite.API)
+           .build();
+       client.registerConnectionCallbacks((ConnectionCallback) bundle -> sendInvitation());
+   }
+
+   private void sendInvitation() {
+       Intent invite = new AppInviteInvitation.IntentBuilder(getString(lets_shake_hands))
+           .setMessage(getString(baby_lets_shake_hands))
+           .setCallToActionText(getString(lets_be_friends))
+           .build();
+       startActivityForResult(invite, REQUEST_INVITE);
+   }
+```
+Inside the *onActivityResult* we'll just log the number of invitations sent. To do that, we'll retrieve invitation ids from the result data.
+```java
+String[] invitationIds = AppInviteInvitation.getInvitationIds(resultCode, data);
+```
+
+Launch the app and touch the popup menu's *Send Invitation* entry. Try to invite a friend to install the app (he won't be able to, because your app won't be published to Google Play).
+
+## Enable Analytics
+> To skip this step, do:
+>
+    git checkout -f 8/analytics
+
+```groovy
+compile 'com.google.firebase:firebase-analytics:9.4.0'
+```
+Analytics in Firebase work from the box. But if you want to log custom events to track user navigation through the app, for example, you can do that too.
+
+Inside **Analytics**.*userOpenedApp*, do:
+```java
+FirebaseAnalytics.getInstance(context).logEvent(FirebaseAnalytics.Event.APP_OPEN, new Bundle());
+```
+This will log an event which you should be able to see on the analytics tab in your [Firebase Console][7].
+
+## Report Crashes
+> To skip this step, do:
+>
+    git checkout -f 9/crashes
+
+```groovy
+compile 'com.google.firebase:firebase-crash:9.4.0'
+```
+This one is pretty straightforward. Firebase will log all the exceptions that happened in your app with their stacktraces.
+
+Let's cause the app to crash by throwing an exception when the *Crash and Burn* option is selected from the popup menu.
+```java
+case crash_menu:
+    throw new MotherKaliStartedPartyDarklyException("Just checkin'");
+```
+To to the [Firebase Console][7] and see that your exception was recorded.
+
+## Ads!
+> To skip this step, do:
+>
+    git checkout -f 10/ads
+
+It's that time when you want to start earning money. Who doesn't love ads? Huge profits are just around the corner.
+
+```groovy
+compile 'com.google.android.gms:play-services-ads:9.4.0'
+```
+
+In activity_signin.xml, declare the ads widget:
+```xml
+...
+<FrameLayout
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    ...>
+
+    ...
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/ad_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id"/>
+</FrameLayout>
+```
+
+Bind it as a field in the **SigninActivity**
+```java
+@BindView(ad_view) AdView adView;
+```
+Then load it inside the *onCreate*:
+```java
+adView.loadAd(new AdRequest.Builder().build());
+```
+
+And integrate it with the **SigninActivity**'s lifecycle:
+```java
+@Override
+protected void onPause() {
+    if (adView != null) adView.pause();
+    super.onPause();
+}
+
+@Override
+protected void onResume() {
+    super.onResume();
+    if (adView != null) adView.resume();
+}
+
+@Override
+protected void onDestroy() {
+    if (adView != null) adView.destroy();
+    super.onDestroy();
+}
+```
+
+Launch the app and behold the ads!
+
+[>>>>>]Ads[<<<<<]
+
+Congratulations, you're done. Hope you enjoyed the event. We'be happy to see you at [the next one][8]!
 
 [1]: https://firebase.google.com/docs/android/setup
 [2]: https://firebase.google.com
@@ -399,3 +745,5 @@ Launch the app, touch the floating button in the bottom right corner and try cre
 [4]: https://console.firebase.google.com
 [5]: https://firebase.google.com/docs/android/setup
 [6]: https://www.javacodegeeks.com/2013/09/android-viewholder-pattern-example.html
+[7]: https://console.firebase.google.com
+[8]: http://gdgriga.lv
