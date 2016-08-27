@@ -738,7 +738,7 @@ Launch the app and behold the ads!
 
 ![screenshot_2016-08-27-03-20-22](https://cloud.githubusercontent.com/assets/5235166/18023730/5be55538-6c05-11e6-82ad-e7825c1cf741.png)
 
-Congratulations, you're done. Hope you enjoyed the event. We'be happy to see you at [the next one][8]!
+Congratulations, you're done. Hope you enjoyed the event. We'll be happy to see you at [the next one][8]!
 
 [1]: https://firebase.google.com/docs/android/setup
 [2]: https://firebase.google.com
