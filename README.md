@@ -15,6 +15,10 @@ An Android client for Google's [Firebase][2] project. This app was built for [GD
 A sprint board (something like [Trello][3]) that utilizes most of the Firebase features.
 
 ## Getting Started
+> View the list of branches for the workshop
+>
+    git branch -v
+>
 > To skip this step, do:
 >
     git checkout -f 1/firebase-setup
