@@ -459,7 +459,7 @@ public static void deleteAttachment(String url) {
 
 Launch the app, and try creating a task with an attachment. Let the attachment load before hitting the apply button. If all goes well, the task will be viewed with the attachment. Edit the task to delete the attachment, it should work as well.
 
-[>>>>>>>>>]Tasks with Attachments[<<<<<<<<<]
+![screenshot_2016-08-26-23-45-20](https://cloud.githubusercontent.com/assets/5235166/18023745/85d9ee08-6c05-11e6-9673-e0af0796d662.png)
 
 ## Enable Notifications
 > To skip this step, do:
@@ -524,6 +524,7 @@ You'll also need to add the services under manifest's application tag:
 ```
 
 Launch the app and put it in background. Go to the [project's console][7] and send the notification to your device.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+
 ## Remote Configuration
 > To skip this step, do:
 >
@@ -598,7 +599,7 @@ case fetch_config:
 
 Launch the app and choose the *Fetch Configuration* option from the menu. The color of the toolbar should change.
 
-[>>>>>>>>]Yellow Toolbar[<<<<<<<<<<<<<<<<<<]
+![screenshot_2016-08-27-01-59-02](https://cloud.githubusercontent.com/assets/5235166/18023686/e21251fc-6c04-11e6-96a4-bb473c46e821.png)
 
 ## Send Installation Invitations
 > To skip this step, do:
@@ -735,7 +736,7 @@ protected void onDestroy() {
 
 Launch the app and behold the ads!
 
-[>>>>>]Ads[<<<<<]
+![screenshot_2016-08-27-03-20-22](https://cloud.githubusercontent.com/assets/5235166/18023730/5be55538-6c05-11e6-82ad-e7825c1cf741.png)
 
 Congratulations, you're done. Hope you enjoyed the event. We'be happy to see you at [the next one][8]!
 
