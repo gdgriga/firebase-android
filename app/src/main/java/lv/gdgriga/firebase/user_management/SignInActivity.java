@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -25,6 +27,7 @@ import static android.widget.Toast.makeText;
 import static com.google.android.gms.auth.api.Auth.GOOGLE_SIGN_IN_API;
 import static com.google.android.gms.auth.api.Auth.GoogleSignInApi;
 import static com.google.android.gms.auth.api.signin.GoogleSignInOptions.DEFAULT_SIGN_IN;
+import static lv.gdgriga.firebase.R.id.ad_view;
 import static lv.gdgriga.firebase.R.id.sign_in_button;
 import static lv.gdgriga.firebase.R.layout.activity_signin;
 import static lv.gdgriga.firebase.R.string.default_web_client_id;
@@ -33,6 +36,7 @@ public class SignInActivity extends AppCompatActivity {
     private static final int signOutCode = 0xCAFE;
     private static final int signInCode = 0xC001;
     @BindView(sign_in_button) SignInButton signInButton;
+    @BindView(ad_view) AdView adView;
     private GoogleApiClient googleClient;
 
     @Override
@@ -45,6 +49,7 @@ public class SignInActivity extends AppCompatActivity {
                                                         .addApi(GOOGLE_SIGN_IN_API, buildSignInOptions())
                                                         .build();
         signInButton.setOnClickListener(this::onSignIn);
+        adView.loadAd(new AdRequest.Builder().build());
     }
 
     private GoogleSignInOptions buildSignInOptions() {
@@ -112,5 +117,23 @@ public class SignInActivity extends AppCompatActivity {
 
     private void toast(String message) {
         makeText(this, message, LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onPause() {
+        if (adView != null) adView.pause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (adView != null) adView.resume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (adView != null) adView.destroy();
+        super.onDestroy();
     }
 }

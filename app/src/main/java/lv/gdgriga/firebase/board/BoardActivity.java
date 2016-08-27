@@ -83,7 +83,7 @@ public class BoardActivity extends AppCompatActivity {
                 startActivity(new Intent(this, InvitationsActivity.class));
                 break;
             case crash_menu:
-                throw new MotherKaliStartedPartyDarklyException("Just checkin'");
+                throw new MotherKaliStartedPartyDarklyException("That's all, folks!");
         }
         return true;
     }
